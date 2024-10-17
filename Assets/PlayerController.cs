@@ -7,11 +7,17 @@ public class PlayerController : MonoBehaviour
     private Vector2 movementVector;
     private Rigidbody2D rb;
     private bool isGrounded;
+    private int score = 0;
+    private SpriteRenderer sr;
+
+    [SerializeField] Animator animator;
+
 
     [SerializeField] int speed = 0;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
     void Update()
     {
@@ -22,6 +28,8 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         movementVector = value.Get<Vector2>();
+
+        animator.SetBool("isRunning", !Mathf.Approximately(movementVector.x, 0));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,4 +54,16 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(new Vector2(0, 400));
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Collectable"));
+            {
+            other.gameObject.SetActive(false);
+            score++;
+            Debug.Log("My score is: " + score);
+        }
+    }
+
 }
+
